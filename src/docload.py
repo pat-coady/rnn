@@ -24,7 +24,7 @@ def load_books(filenames, gutenberg=False):
     file. Also return the document as a list of words in the same order
     as the original document.
     Notes:
-        The following punctuation are treated as separate words: .,!?"
+        The following punctuation are treated as separate words: ;:-()&.,!?'"
         All letters changed to lower-case
         Contractions (e.g. don't, we'll) returned as-is (i.e. ' treated as
             letter). This could cause problems for text that uses single
@@ -57,8 +57,8 @@ def load_books(filenames, gutenberg=False):
                     continue
                 if not in_book:
                     continue
-                # TODO: check reg-exp below, what is ' for?
-                words = re.findall("[\\w']+|[.,!?'\"]", line.lower().strip('\n'))
+                # TODO: check reg-exp below
+                words = re.findall("[\\w']+|[;:\-\(\)&.,!?\"]", line.lower().strip('\n'))
                 word_counter.update(words)
                 word_list.extend(words)
                 num_lines += 1
