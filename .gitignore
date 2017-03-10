@@ -19,6 +19,7 @@ tmp/
 # no tensorboard files
 
 tf_logs/
+tf_logs*/
 
 # no jekyll generated files
 
