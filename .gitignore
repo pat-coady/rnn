@@ -1,22 +1,23 @@
-# no pycharm config files
-
-.idea
-
 # no jupyter notebook config/status files
 
-src/.ipynb_checkpoints
-.ipynb_checkpoints
-src/__pycache__
+src/.ipynb_checkpoints/
+.ipynb_checkpoints/
+src/__pycache__/
 
 # no pickle files from data folder
 
 data/*.p
 
-# no model savepoints
+# no jekyll generated files
 
-tmp/
+_site/
+.sass-cache/
 
-# no tensorboard files
+# no tf log file
 
 tf_logs/
+
+# no pyCharm files
+
+.idea/
 

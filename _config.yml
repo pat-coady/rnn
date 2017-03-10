@@ -1,0 +1,5 @@
+theme: jekyll-theme-cayman
+gem "github-pages", group: :jekyll_plugins
+title: RNN Language Model
+description: Exploring RNNs with TensorFlow and TensorBoard
+show_downloads: "true"
