@@ -20,3 +20,8 @@ tmp/
 
 tf_logs/
 
+# no jekyll generated files
+
+.sass-cache/
+_site
+
