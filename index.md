@@ -6,7 +6,7 @@ comments: true
 # Objectives
 
 1. Build practical experience designing and training RNNs
-2. Compare quality of word vectors learned by RNN vs. [CBOW](https://arxiv.org/pdf/1301.3781.pdf)
+2. Compare quality of word vectors learned by RNN vs. [Continuous Bag-of-Words (CBOW)](https://arxiv.org/pdf/1301.3781.pdf)
 3. Learn TensorBoard
 
 I went into some detail on Word Vectors and Unsupervised Learning in my [Word2Vec with TensorFlow Project](https://pat-coady.github.io/word2vec/) - so I won't repeat that here. 
@@ -24,9 +24,9 @@ I went into some detail on Word Vectors and Unsupervised Learning in my [Word2Ve
 
 With this skeleton in place, there are still many decisions to explore:
 
-* RNN cell: BasicRNN (no memory), LSTM or GRU
-* Layer sizes: embedding layer, number RNN cells, hidden layer
-* RNN length: number of steps to unroll RNN
+    * RNN cell: BasicRNN (no memory), LSTM or GRU
+    * Layer sizes: embedding layer, number RNN cells, hidden layer
+    * RNN length: number of steps to unroll RNN
 
 One decision I made at the start was to learn sequences of words versus sequences of characters. This was partly so I could compare the quality of word vectors from RNNs to CBOW. Also, I wanted to use TensorBoard's embedding visualization. And, finally, I wanted to see how [Candidate Sampling](https://www.tensorflow.org/api_guides/python/nn#Candidate_Sampling) loss would perform with a RNN.
 
@@ -34,11 +34,11 @@ One decision I made at the start was to learn sequences of words versus sequence
 
 Like my Word2Vec project, I again used 3 Sherlock Holmes books as the model input (courtesy of [Project Gutenberg](https://www.gutenberg.org/)). This choice was convenient because I had already written helpers to load and process this document format.
 
-Training introduces further hyperparameters:
+Training introduces further hyperparameters. To name a few:
 
-* Optimizer: SGD w/ momentum, Adam and RMSProp
-* Learning rate (and other optimizer controls)
-* Gradient norm clipping
+    * Optimizer: SGD w/ momentum, Adam and RMSProp
+    * Learning rate (and other optimizer controls)
+    * Gradient norm clipping
 
 As with the model hyperparameters, I will explore various settings and report the results. As you will see, TensorBoard helps immensely as you explore model settings.
 
@@ -57,13 +57,14 @@ Everyone enjoys reading RNN-generated text:
     mr. holmes, at the moment when i got home in the morning with my
     father, however, who had shown up the whole death of the man s death.
     
-This model used LSTM cells and was trained for 75 epochs). Here are the key settings:
+This model used LSTM cells and was trained for 75 epochs. Here are the key settings:
 
-* embedding layer width = 64
-* rnn width = 192
-* rnn roll out = 20
-* hidden layer width = 96
-* learning rate = 0.05, momentum = 0.8 (MomentumOptimizer)
+    * embedding layer width = 64
+    * rnn width = 192
+    * rnn sequence length = 20
+    * hidden layer width = 96
+    * learning rate = 0.05, momentum = 0.8 (SGD w/ momentum)
+    * batch size = 32
 
 ## Word Vectors
 
@@ -73,15 +74,15 @@ My evaluation of the learned word vectors is purely qualitative. In that spirit,
 ![t-SNE Learning](assets/t-sne-lava-lamp.gif)
 </div>
 
-(Incidentally, I have found the PCA does quite poorly on this task. Even with a 3rd dimension, it seems rare that 2 closely spaced points are related words.)
+(Incidentally, I have found the PCA does quite poorly on this task. Even with a 3rd dimension, it is rare that 2 closely spaced points are related words.)
 
-I've run t-SNE for 350 iterations (all through the TensorBoard GUI) on the 2,048 most common words. In this animation I search for a cluster of words. Then I select the cluster and check for a relationship. Honestly, this was the first cluster I grabbed:
+I ran t-SNE for 350 iterations (all through the TensorBoard GUI) on the 2,048 most common words. In this animation I search for a cluster of words. Then I select the cluster and check for a relationship:
 
 <div style="border: 1px solid black; display: inline-block; padding: 15px; margin: 15px; margin-left: 0px;" markdown="1">
 ![t-SNE Learning](assets/explore-embed.gif)
 </div>
 
-### RNN vs. CBOW
+## RNN vs. CBOW
 
 Here are some synonyms and analogies from the RNN embedding and the CBOW embedding. First synonyms (based on cosine similarity):
 
@@ -117,16 +118,45 @@ I might give a slight edge to RNN. In fairness to CBOW, the RNN was trained 5 ti
 
 I started with a LSTM cell and some quick exploration to pick a reasonable optimizer and learning rate. Then I checked a grid of layer sizes: embedding layer, rnn layer (width and number of steps) and final hidden layer.
 
-* embedding layer width = 64
-* rnn width = 192
-* rnn roll out = 20
-* hidden layer width = 96
+    * embedding layer width = 64
+    * rnn width = 192
+    * rnn sequence length = 20
+    * hidden layer width = 96
 
-At these settings, the model performance was most sensitive to decreasing the hidden layer width. A rnn rollout of 20 steps is overkill for learning word vectors. Even at a rollout of 5 steps, you learn reasonably good word vectors. But with such a short rollout the model does a terrible job at generating new text - typically repeating the same few words (e.g. 'it is. it is. it is. it is.')
+At these settings, the model performance was most sensitive to decreasing the hidden layer width. A rnn sequence length of 20 steps is overkill for learning word vectors. Even at a rollout of 5 steps, you learn reasonably good word vectors. But with such a short rollout the model does a terrible job at generating new text - typically repeating the same few words (e.g. 'it is. it is. it is. it is.')
+
+It is subtle, but the lower grouping of training loss curves is with a hidden layer size of 96. The upper grouping of curves have a hidden layer size of 64:
+
+<div style="border: 1px solid black; display: inline-block; padding: 15px; margin: 15px; margin-left: 0px;" markdown="1">
+![Loss vs. Architecture Variation](assets/loss_vs_arch.png)
+</div>
+(y-axis is cross-entropy loss with 64-way candidate sampling loss. x-axis is batch #.)
 
 ## Optimizer
 
+I didn't spend as much time evaluating optimizers as I would have liked. But SGD w/ Momentum outperformed both Adam and RMSProp for a variety of settings. Both Adam and RMSProp were significantly (about 2x) slower per epoch, but made no faster progress and SGD w/ Momentum.
+
+TODO - Fire off a background job to check this now that other model parameters are settled. Perhaps include a plot with relative time.
+
 ## RNN Cell
+
+I won't explain various RNN cell types here - [this post](http://colah.github.io/posts/2015-08-Understanding-LSTMs/) already provides a terrific explanation.
+
+### GRU
+
+The GRU cell appears more elegant than the LSTM cell. The same control is used for the input and forgetting gates. Also, the cell state and the hidden state are cleverly combined into one (i.e. no separate cell state). You would think this cell would run faster, and perhaps be easier to train. I found in TensorFlow that GRU ran **slower** than the LSTM. And, if anything, GRU was a bit more touchy to changes learning rate. 
+
+[This paper](https://arxiv.org/pdf/1412.3555v1.pdf) does an in-depth comparison of GRU vs. LSTM. They found mixed performance results. However, their time per epoch is consistently faster with the GRU. So, perhaps there is an implementation issue with the TensorFlow **GRUCell** (or, alternatively, with the paper's LSTM cell)?
+
+### Basic RNN
+
+There was no big surprise here. This cell was very difficult to train even with a sequence length of 5. For example, in this training run the gradients exploded after about 25 epochs:
+
+TO-DO: get screen shot
+
+<div style="border: 1px solid black; display: inline-block; padding: 15px; margin: 15px; margin-left: 0px;" markdown="1">
+![t-SNE Learning](assets/.gif)
+</div>
 
 ## Learning Rate
 
