@@ -58,14 +58,14 @@ The model results presented here use a LSTM-based RNN that was trained for 75 ep
 
 Everyone enjoys reading RNN-generated text:
 
-    true as gospel," said he, smiling," but if you are the use of your
-    own eyes that you have read me to your hotel, and you have no use
-    in the way."" it was in a time."" you have no doubt that you have
-    been in the house," said holmes, laughing;" but if you can catch 
-    the police, ' said he. 'i have three times in the room. '" 'i had 
-    been better, ' said i; 'you have been a right. you must make a note,
-    mr. holmes, at the moment when i got home in the morning with my
-    father, however, who had shown up the whole death of the man s death.
+    where he has not seen."" it is," said holmes," that you have ever
+    returned."" i am sure that you are very much in the matter. i have 
+    brought you that there is a case between two or two else."" i am
+    sure that you are right," said he." i am afraid that you are right
+    up before you come and look."" by the way, that is possible, john," 
+    said he," that you have had a pretty clear chance. '" 'i am sure when
+    my wife died to me - -"" oh, indeed! i was glad that i could not
+    get her hand." my dear mr. sherlock holmes, sir, that is my wife,
 
 ## Word Vectors
 
