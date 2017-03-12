@@ -192,9 +192,31 @@ The 3 plots below show gradient norm clipping levels of 0.01, 0.1 and 1 (from le
 
 These histograms show the distribution of activations in the RNN. The histograms layer "towards you" as training progresses. As expected, the gradient clipping stops the activations from saturating at the beginning of training. But the model still benefits from a higher learning rate. Overall, gradient clipping wasn't particularly helpful.
 
-# The Code
+# [The Code](https://github.com/pat-coady/rnn)
 
+In addition to the python modules described in [my word2vec project](https://github.com/pat-coady/word2vec), there are the following Python Notebooks:
 
+**sherlock_rnn.ipynb**: Configured with the best model configuration and training settings that I found. This notebook:
+1. Loads the books
+2. Trains for 75 epochs
+3. Saves summaries and embeddings for viewing in TensorBoard
+4. Uses the RNN to predict 200 words of text
+
+**sherlock_rnn_tune.ipynb**: Notebook for sweeping hyperparameters and comparing results using TensorBoard. 
+* layer sizes
+* RNN cell type and sequence length
+* optimizer and learning rate
+* batch_size and more ...
+
+**sherlock_rnn_gradclip.ipynb**: Quick change to sherlock_rnn_tune.ipynb to try gradient norm clipping.
+
+**sherlock_queue.ipynb**: Quick look at using QueueRunner instead of feeddict.
+
+Finally, to launch Tensorboard, just go into the log directory and execute:
+
+    tensorboard --logdir .
+
+I hope this GitHub Page and [associated repository](https://github.com/pat-coady/rnn) help you better understand how to use TensorFlow and TensorBoard. Also, this [blog post](https://pat-coady.github.io/projects/2017/03/09/rnn-and-tensorboard.html) provides a high-level description of this project.
 
 {% if page.comments %}
 <div id="disqus_thread"></div>
