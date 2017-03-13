@@ -9,7 +9,7 @@ comments: true
 2. Compare quality of RNN vs. [Continuous Bag-of-Words (CBOW)](https://arxiv.org/pdf/1301.3781.pdf) word vectors
 3. Learn TensorBoard
 
-I described the importance of Word Vectors and Unsupervised Learning in my [Word2Vec with TensorFlow Project](https://pat-coady.github.io/word2vec/) - so I won't repeat that here. 
+I described the importance of Word Vectors and Unsupervised Learning in my [Word2Vec with TensorFlow Project](https://pat-coady.github.io/word2vec/), so I won't repeat that here. 
 
 # Architecture
 
@@ -28,19 +28,19 @@ With this skeleton in place, there are still many options to explore:
 * Layer sizes: embedding layer, number RNN cells, hidden layer
 * RNN sequence length
 
-I decided at the beginning to learn sequences of words versus sequences of characters. This was partly so I could compare the quality of word vectors from RNNs to CBOW. Also, I wanted to use TensorBoard's embedding visualization. And, finally, I wanted to see how [Candidate Sampling](https://www.tensorflow.org/api_guides/python/nn#Candidate_Sampling) loss would perform with a RNN.
+I decided at the beginning to learn sequences of words versus sequences of characters. This was partly so I could compare the quality of word vectors from RNNs to CBOW. Also, I wanted to use TensorBoard's embedding visualization. Finally, I wanted to see how [Candidate Sampling](https://www.tensorflow.org/api_guides/python/nn#Candidate_Sampling) loss would perform with a RNN.
 
 # Training
 
-As with my Word2Vec project, I used 3 Sherlock Holmes books to train the model (courtesy of [Project Gutenberg](https://www.gutenberg.org/)). This choice was convenient since I had already written programs to load and prepare these documents. (In the future I would like to train the model on the New York Times corpus.) 
+As with my Word2Vec project, I used 3 Sherlock Holmes books to train the model (courtesy of [Project Gutenberg](https://www.gutenberg.org/)). This choice was convenient since I had already written programs to load and prepare these documents. In the future, I would like to train the model on the New York Times corpus.
 
 Training introduces more options (i.e. hyperparameters) to explore. In particular, I investigated:
 
-* Optimizer: SGD w/ momentum, Adam and RMSProp
+* Optimizer: SGD w/ momentum, Adam, and RMSProp
 * Learning rate
 * Gradient norm clipping
 
-As with the model hyperparameters, I will explore various settings and summarize the results. As you will see, TensorBoard helps immensely as you explore model settings.
+As with the model hyperparameters, I explored various settings and will now summarize the results. As you will see, TensorBoard helps immensely as you explore model settings.
 
 # Results
     
@@ -52,7 +52,6 @@ The model results presented here use a LSTM-based RNN that was trained for 75 ep
     hidden layer width = 96
     learning rate = 0.05, momentum = 0.8 (SGD with momentum)
     batch size = 32
-
 
 ## Generated Text
 
@@ -75,9 +74,9 @@ My evaluation of the word vectors is purely qualitative. In that spirit, here ar
 ![t-SNE Learning](assets/t-sne-lava-lamp.gif)
 </div>
 
-(Incidentally, I have found the PCA does quite poorly on this task. Even with a 3rd dimension, it is rare that 2 closely spaced points are related words.)
+Incidentally, I have found the PCA does quite poorly on this task. Even with a 3rd dimension, it is rare that 2 closely spaced points are related words.
 
-I ran t-SNE for 350 iterations on the 2,048 most common words (done with the TensorBoard GUI). In this animation I search for a cluster of words. Then I view the words in the cluster to see their relationship - here the relationship is clear:
+I ran t-SNE for 350 iterations on the 2,048 most common words (done with the TensorBoard GUI). In this animation, I searched for a cluster of words. Then I viewed the words in the cluster to see their relationship - here the relationship is clear:
 
 <div style="border: 1px solid black; display: inline-block; padding: 15px; margin: 15px; margin-left: 0px;" markdown="1">
 ![t-SNE Learning](assets/explore-embed.gif)
@@ -117,14 +116,14 @@ The RNN word vectors seem *slightly* better. In fairness to CBOW, the RNN was tr
 
 ## Layer Sizes
 
-I started with a LSTM cell and some quick exploration to pick a reasonable optimizer and learning rate. Then I checked a grid of layer sizes: embedding layer, rnn layer (width and number of steps) and final hidden layer.
+I started with a LSTM cell and some quick exploration to pick a reasonable optimizer and learning rate. Then I checked a grid of layer sizes: embedding layer, RNN layer (width and number of steps) and final hidden layer.
 
     embedding layer width = 64
-    rnn width = 192
-    rnn sequence length = 20
+    RNN width = 192
+    RNN sequence length = 20
     hidden layer width = 96
 
-At these settings, the model performance was most sensitive to decreasing the hidden layer width. A rnn sequence length of 20 steps is overkill for learning word vectors. Even at a rollout of 5 steps, you learn reasonably good word vectors. But with such a short sequence length the model does a terrible job at generating new text - typically repeating the same few words (e.g. 'it is. it is. it is. it is.')
+At these settings, the model performance was most sensitive to decreasing the hidden layer width. A RNN sequence length of 20 steps is overkill for learning word vectors. Even at a rollout of 5 steps, you learn reasonably good word vectors. But with such a short sequence length the model does a terrible job at generating new text - typically repeating the same few words (e.g. 'it is. it is. it is. it is.')
 
 The lower grouping of training loss curves have a hidden layer size of 96. The upper grouping of curves have a hidden layer size of 64 (The y-axis is cross-entropy loss with 64-way candidate sampling. The x-axis is batch #.):
 
@@ -134,7 +133,7 @@ The lower grouping of training loss curves have a hidden layer size of 96. The u
 
 ## Optimizer
 
-I didn't spend as much time evaluating optimizers as I would have liked. But gradient descent with momentum outperformed both Adam and RMSProp for a variety of settings. Both Adam and RMSProp were significantly (about 2x) slower per epoch. And, importantly, made less training progress per epoch.
+I didn't spend as much time evaluating optimizers as I would have liked. Gradient descent with momentum outperformed both Adam and RMSProp for a variety of settings. Both Adam and RMSProp were significantly (about 2x) slower per epoch. And, importantly, made less training progress per epoch.
 
 ## RNN Cell
 
@@ -142,7 +141,7 @@ I didn't spend as much time evaluating optimizers as I would have liked. But gra
 
 ### GRU
 
-The GRU cell seems more elegant than the LSTM cell. The same control is used for the input and "forgetting" gates. Also, the cell state and the hidden state are cleverly combined into one (i.e. no separate cell state). You would think this cell would run faster, and even be easier to train. I found in TensorFlow that GRU ran slightly **slower** than the LSTM. The GRU also seemed a bit more sensitive to learning rate.
+The GRU cell seems more elegant than the LSTM cell. The same control is used for the input and "forgetting" gates. Also, the cell state and the hidden state are cleverly combined into one (i.e. no separate cell state). You would think this cell would run faster and be easier to train. I found in TensorFlow that GRU ran slightly **slower** than the LSTM. The GRU also seemed a bit more sensitive to learning rate.
 
 This plot shows training progress with CPU time on the x-axis (the orange trace is the GRU):
 
@@ -150,9 +149,9 @@ This plot shows training progress with CPU time on the x-axis (the orange trace 
 ![GRU vs. LSTM Learning Rate](assets/gru-vs-lstm.png)
 </div>
 
-[This paper](https://arxiv.org/pdf/1412.3555v1.pdf) does an in-depth comparison of GRU vs. LSTM. They found mixed performance results. However, their time per epoch is consistently faster with the GRU. So, perhaps there is an implementation issue with the TensorFlow GRUCell?
+[This paper](https://arxiv.org/pdf/1412.3555v1.pdf) does an in-depth comparison of GRU vs. LSTM. The authors found mixed performance results. However, their reported time per epoch is consistently faster with the GRU. Perhaps there is an implementation issue with the TensorFlow GRUCell?
 
-Both models learned reasonable word vectors, here is a quick qualitative check of the GRU. I like that the model learns that the apostrophe comes **after** the "s" in Holmes.
+Both models learned reasonable word vectors. Here is a quick qualitative check of the GRU. I like that the model learns that the apostrophe comes **after** the "s" in Holmes.
 
 <div style="border: 1px solid black; display: inline-block; padding: 15px; margin: 15px; margin-left: 0px;" markdown="1">
 ![GRU Word Cloud](assets/possessive_similarity.png)
@@ -166,7 +165,7 @@ It was no big surprise that the basic RNN cell was very difficult to train. Even
 ![Basic RNN Learning](assets/basic-rnn-learn.png)
 </div>
 
-Here is another view of the same phenomenon. Here we are looking at the distribution of RNN output activations vs. training step. The sequence lengths are 3, 5 and 10 from left to right:
+Here is another view of the same phenomenon. Here we look at the distribution of RNN output activations vs. training step. The sequence lengths are 3, 5 and 10 from left-to-right:
 
 <div style="border: 1px solid black; display: inline-block; padding: 15px; margin: 15px; margin-left: 0px;" markdown="1">
 ![Basic RNN Output Activations](assets/basic-rnn-out.png)
@@ -174,7 +173,7 @@ Here is another view of the same phenomenon. Here we are looking at the distribu
 
 ## Learning Rate
 
-Using gradient descent with momentum, a learning rate between 0.1 and 0.01 performed best (momentum = 0.8). With a small learning rate, the network is too slow to recover from exploding gradients. The below figure shows the distribution of activations in the RNN with learning rates 0.001, 0.01 and 0.1 (from left to right). The left-most plot is just beginning to recover after 25 epochs.
+Using gradient descent with momentum, a learning rate between 0.1 and 0.01 performed best (momentum = 0.8). With a small learning rate, the network is too slow to recover from exploding gradients. The figure below shows the distribution of activations in the RNN with learning rates 0.001, 0.01, and 0.1 (from left-to-right). The left-most plot is just beginning to recover after 25 epochs.
 
 <div style="border: 1px solid black; display: inline-block; padding: 15px; margin: 15px; margin-left: 0px;" markdown="1">
 ![Learning Rate](assets/learn_rate.png)
@@ -190,7 +189,7 @@ The 3 plots below show gradient norm clipping levels of 0.01, 0.1 and 1 (from le
 ![Learning Rate](assets/grad-norm-clip.png)
 </div>
 
-These histograms show the distribution of activations in the RNN. The histograms layer "towards you" as training progresses. As expected, the gradient clipping stops the activations from saturating at the beginning of training. But the model still benefits from a higher learning rate. Overall, gradient clipping wasn't particularly helpful.
+These histograms show the distribution of activations in the RNN. The histograms layer towards you as training progresses. As expected, the gradient clipping stops the activations from saturating at the beginning of training; However, the model still benefits from a higher learning rate. Overall, gradient clipping wasn't particularly helpful.
 
 # [The Code](https://github.com/pat-coady/rnn)
 
