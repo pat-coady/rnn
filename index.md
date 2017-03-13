@@ -166,7 +166,7 @@ It was no big surprise that the basic RNN cell was very difficult to train. Even
 ![Basic RNN Learning](assets/basic-rnn-learn.png)
 </div>
 
-Here is another view of the same phenomenom. Here we are looking at the distribution of RNN output activations vs. training step. The sequence lengths are 3, 5 and 10 from left to right:
+Here is another view of the same phenomenon. Here we are looking at the distribution of RNN output activations vs. training step. The sequence lengths are 3, 5 and 10 from left to right:
 
 <div style="border: 1px solid black; display: inline-block; padding: 15px; margin: 15px; margin-left: 0px;" markdown="1">
 ![Basic RNN Output Activations](assets/basic-rnn-out.png)
