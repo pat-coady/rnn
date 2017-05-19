@@ -6,10 +6,12 @@ comments: true
 # Objectives
 
 1. Design and train a RNN language model
-2. Compare quality of RNN vs. [Continuous Bag-of-Words (CBOW)](https://arxiv.org/pdf/1301.3781.pdf) word vectors
+2. Compare quality of RNN vs. [Skip-Gram](https://arxiv.org/pdf/1310.4546.pdf) word vectors
 3. Learn TensorBoard
 
-I described the importance of Word Vectors and Unsupervised Learning in my [Word2Vec with TensorFlow Project](https://pat-coady.github.io/word2vec/), so I won't repeat that here. 
+I described the importance of Word Vectors and Unsupervised Learning in my [Word2Vec with TensorFlow Project](https://pat-coady.github.io/word2vec/), so I won't repeat that here.
+
+Also, technically I'm not comparing against a true Skip-Gram model. The model used here predicts a target word (i.e. center word) based on its context words (i.e. surrounding words). A Skip-Gram model does the reverse: predicting the context words based on the center word. 
 
 # Architecture
 
@@ -28,7 +30,7 @@ With this skeleton in place, there are still many options to explore:
 * Layer sizes: embedding layer, number RNN cells, hidden layer
 * RNN sequence length
 
-I decided at the beginning to learn sequences of words versus sequences of characters. This was partly so I could compare the quality of word vectors from RNNs to CBOW. Also, I wanted to use TensorBoard's embedding visualization. Finally, I wanted to see how [Candidate Sampling](https://www.tensorflow.org/api_guides/python/nn#Candidate_Sampling) loss would perform with a RNN.
+I decided at the beginning to learn sequences of words versus sequences of characters. This was partly so I could compare the quality of word vectors from RNNs to Skip-Gram. Also, I wanted to use TensorBoard's embedding visualization. Finally, I wanted to see how [Candidate Sampling](https://www.tensorflow.org/api_guides/python/nn#Candidate_Sampling) loss would perform with a RNN.
 
 # Training
 
@@ -82,9 +84,9 @@ I ran t-SNE for 350 iterations on the 2,048 most common words (done with the Ten
 ![t-SNE Learning](assets/explore-embed.gif)
 </div>
 
-## RNN vs. CBOW Word Vectors
+## RNN vs. Skip-Gram Word Vectors
 
-Here are some synonyms and analogies from the RNN embedding and the CBOW embedding. First the synonyms (based on cosine similarity):
+Here are some synonyms and analogies from the RNN embedding and the Skip-Gram embedding. First the synonyms (based on cosine similarity):
 
 **RNN:**
 
@@ -93,7 +95,7 @@ Here are some synonyms and analogies from the RNN embedding and the CBOW embeddi
     5 closest words to: 'mr'
     ['st', 'mrs', 'dr', 'continued', 'above']
     
-**CBOW:**
+**Skip-Gram:**
 
     5 closest words to: 'run'
     ['fall', 'sit', 'go', 'break', 'live']
@@ -106,11 +108,11 @@ Not exactly astounding performance on the synonyms - I could have cherry-picked 
 
     ['is', 'am', 'are']
     
-**CBOW:**
+**Skip-Gram:**
 
     ['is', 'shows', 'becomes']
 
-The RNN word vectors seem *slightly* better. In fairness to CBOW, the RNN was trained 5 times longer.
+The RNN word vectors seem *slightly* better. In fairness to the Skip-Gram, the RNN was trained 5 times longer.
 
 # Hyperparameters
 
