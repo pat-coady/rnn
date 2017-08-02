@@ -9,7 +9,7 @@ comments: true
 2. Compare quality of RNN vs. [Skip-Gram](https://arxiv.org/pdf/1310.4546.pdf) word vectors
 3. Learn TensorBoard
 
-I described the importance of Word Vectors and Unsupervised Learning in my [Word2Vec with TensorFlow Project](https://pat-coady.github.io/word2vec/), so I won't repeat that here.
+I described the importance of Word Vectors and Unsupervised Learning in my [Word2Vec with TensorFlow Project](http://learningai.io/word2vec/), so I won't repeat that here.
 
 Also, technically I'm not comparing against a true Skip-Gram model. The model used here predicts a target word (i.e. center word) based on its context words (i.e. surrounding words). A Skip-Gram model does the reverse: predicting the context words based on the center word. 
 
@@ -217,13 +217,13 @@ Finally, to launch Tensorboard, just go into the log directory and execute:
 
     tensorboard --logdir .
 
-I hope this GitHub Page and [associated repository](https://github.com/pat-coady/rnn) help you better understand how to use TensorFlow and TensorBoard. Also, this [blog post](https://pat-coady.github.io/projects/2017/03/09/rnn-and-tensorboard.html) provides a high-level description of this project.
+I hope this GitHub Page and [associated repository](https://github.com/pat-coady/rnn) help you better understand how to use TensorFlow and TensorBoard. Also, this [blog post](http://learningai.io/projects/2017/03/09/rnn-and-tensorboard.html) provides a high-level description of this project.
 
 {% if page.comments %}
 <div id="disqus_thread"></div>
 <script>
 var disqus_config = function () {
-this.page.url = 'https://pat-coady.github.io/rnn/';
+this.page.url = 'http://learningai.io/rnn/';
 };
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');
